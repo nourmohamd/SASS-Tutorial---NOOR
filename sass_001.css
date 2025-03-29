@@ -1,0 +1,256 @@
+/* 
+Sass ===> Syntactically Awesome Style Sheet
+That is an Extension For CSS
+That is very Important for Front-End
+يقوم المتصفح بتحويل الأكواد من لغة البرمجة ساس إلى لغة البرمجة سي أس أس
+نستخدمها لتوفير الوقت والعمل بأحترافية عالية
+تستخدم مميزات لغات البرمجة فيها مثل
+1 - Variables
+2 - Functions
+3 - Loop
+4 - Extend
+5 - Control Flow
+6 - Advanced Structre
+There are two ways to write Sass :
+1 - nameFile.sass ===> Not near from Css (Without {} and ;)
+2 - nameFile.scss ===> near from Css From Side Style (With {} and ;)
+Note 1: When we click on Watch Sass will build two files The first is a nameFile.css , The second is a nameFile.css.map
+Note 2: For build sass file and when click on watch sass ==> Not build file .css and file .css.map ===> We should to write _ before nameFile like _nameFile.scss
+Note 3: When we click on Watch Sass ==> سوف يتم ترجمة كل ملفات من نوع ساس
+Note 4 (Very Important):
+نستخدم الملاحظة الثانية عندما نريد إنشاء ملف من نوع ساس وعند عمل واتش عليه ما يأنشئ ملف سي اس اس بنفس اسمه
+حيث نستخدم هذه الطريقة لتفعيل إحدى الطريقتين التاليتين
+1 - @import "./path";
+2 - @use "./path";
+3 - @use "./path1" , "./path2" , ... , "./pathN";
+
+The Main Style For Sass Project :
+
+Folder for Sass :
+    --> Folder For Layout
+        --> _global_rules.scss
+        --> main.scss
+    --> Folder For Pages
+        --> _contact.scss
+// وفي النهاية بنية المشروع على كيفك
+
+Lesson 1 ===> Variables
+
+Syntax: $nameVariable: value || "value";
+
+$alt_color: green; ===> global variable
+.header { color: $alt_color; }
+.class { 
+    $alt_color: black; ===> local variable ===> هون عدلنا تعديل مؤقت على المتغير إذا بدك يكون التعديل دائم اكتب بعد القيمة ===> !global
+    color: $alt_color; // black
+}
+.class1 {
+    $alt_color: pink !global; // تعديل دائم
+    color: $alt_color;
+}
+Example :
+
+$alt_color: red;
+
+.class1 {
+  color: $alt_color; // red
+}
+.class2 {
+  $alt_color: pink; // local variable;
+    color: $alt_color;
+}
+.class3 {
+  $alt_color: black !global; // تعديل دائم
+  color: $alt_color; // black
+}
+.class4 {
+  background-color: $alt_color; // black
+}
+
+Notes:
+    من الأفضل لك عندما تنشأ مشروعك الخاص أن تضع ملف خاص بالمتغيرات داخل مجلد ساس وعندما تريد استخدام ملف ساس خاص بالمتغيرات أن تكتب
+    @use "./path" as *;
+    or
+    @use "./path"; ==> ولكن هنا ستحتاج في كل مرة أن تكتب ==> nameFile.nameVariable
+Note ===> Always @use Rule in First Line
+
+Lesson 2 ===> Nesting & Parent Element
+// Default way : (Hard)
+.parent {
+  color: red;
+}
+.parent p {
+  font-size: 13px;
+}
+
+// With Sass : (Easily)
+// 1 -
+.parent {
+  color: red;
+  p {
+    font-size: 13px;
+  }
+}
+// 2 -
+.parent2 {
+  background-color: $alt_color;
+  .p {
+    pointer-events: stroke;
+    .a {
+      color: black;
+    }
+  }
+}
+// Note: If There Is selector doesn't content any statement , it's doesn't show in css file (End)
+// إذا كان أحد التعليمات لا يحوي أي تعليمة فإنه لن يظهر في ملف السي اس اس المصدر
+// like this :
+.k {
+  display: flex;
+}
+
+// Group with Sass :
+.parent-one,
+.parent-two {
+  padding: 10px;
+  .child {
+    padding: 5px;
+  }
+}
+
+النتيجة ===> Css File :
+.parent-one,
+.parent-two {
+  padding: 10px;
+}
+
+.parent-one .child,
+.parent-two .child {
+  padding: 5px;
+}
+
+// التعامل مع التحديد ===> with Sass :
+// 1 -
+.parent > {
+  .a1 {
+    color: yellow;
+  }
+  .a2 {
+    color: yellow;
+  }
+}
+The CSS :
+.parent > .a1 {
+  color: yellow;
+}
+
+.parent > .a2 {
+  color: yellow;
+}
+// 2 -
+.parent {
+  > .child {
+    color: yellow;
+  }
+  .test {
+    color: yellow;
+  }
+  + p {
+    color: yellow;
+  }
+}
+The CSS :
+.parent > .child {
+  color: yellow;
+}
+
+.parent .test {
+  color: yellow;
+}
+
+.parent + p {
+  color: yellow;
+}
+// 3 -
+.parent {
+  > {
+    .e1 {
+      color: yellow;
+    }
+    .e2 {
+      color: yellow;
+    }
+  }
+  // Out {} of >
+}
+The CSS :
+.parent > .e1 {
+  color: yellow;
+}
+
+.parent > .e2 {
+  color: yellow;
+}
+// Properties For Parents :
+// For Select Parent write &
+// 1 -
+.box {
+  .child1 {
+    color: yellow;
+  }
+  .child2 {
+    color: yellow;
+  }
+  // Select Parent.class
+  & .red {
+    color: red;
+  }
+  & .green {
+    color: green;
+  }
+  &:hover {
+    background-color: black;
+  }
+  &:hover .title {
+    font-weight: bold;
+  }
+  :not(&) {
+    font-weight: normal;
+  }
+  [dir="rtl"] & {
+    direction: rtl;
+  }
+}
+/*
+The CSS :
+.box .child1 {
+  color: yellow;
+}
+
+.box .child2 {
+  color: yellow;
+}
+
+.box .red {
+  color: red;
+}
+
+.box .green {
+  color: green;
+}
+
+.box:hover {
+  background-color: black;
+}
+
+.box:hover .title {
+  font-weight: bold;
+}
+
+:not(.box) {
+  font-weight: normal;
+}
+
+[dir="rtl"] .box {
+  direction: rtl;
+}
+*/
