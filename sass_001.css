@@ -253,4 +253,225 @@ The CSS :
 [dir="rtl"] .box {
   direction: rtl;
 }
+
+Lesson 3 ===> Property Decalarations And Placeholder
+
+1 - Property Declarations
+لو عندك تعلمية ولها أختصار مثل
+background ===> background-color, background-size, ....
+font ===> font-size, font-weight
+
+Example:
+.box2 {
+  font-size: 10px;
+  font: {
+    size: 20px;
+    weight: bold;
+  }
+  padding: 10px;
+  margin: auto {
+    top: 20px;
+    bottom: 10px;
+    left: 10px;
+  }
+  border: {
+    width: 2px;
+    color: red;
+    style: solid;
+  }
+}
+The CSS :
+.box2 {
+  font-size: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border-width: 2px;
+  border-color: red;
+  border-style: solid;
+}
+
+2 - Placeholder
+الفكرة هي أنك ربما تكتب الكثير من الميزات ثم تعود وتكتب هذه الميزات نفسها لغير عنصر وهنا يصبح الأمر متعب
+والحل يكون في لغة ساس الغنية عن التعريف
+
+
+// Note : إذا وضعنا بدل % نقطة . فإنه سيحسب العنصر ككلاس عادي ولكن عندما تضع % فإن ملف الساس سيفهم عليك أنك لا تريد جعل هذا العنصر ككلاس عادي فيقوم بجعله كملف إستدعاء
+%anyName {
+هنا تكتب الميزات المراد مشاركتها مع أكثر من عنصر
+}
+.class {
+@extend %anyName // هكذا يكون الاستدعاء
+// بهذا الشكل نضمن وجود الميزات كلها في هذا العنصر
+}
+Example:
+%centerElement {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.parent3 {
+  @extend %centerElement;
+}
+The CSS :
+.parent3 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+Lesson 4 ===>  Control Flow (الجملة الشرطية)
+@if - @else
+Example:
+$theme: "dark";
+.page {
+  @if $theme == "light" {
+    background: {
+      color: white;
+    }
+    color: #444;
+  } @else {
+    background: {
+      color: #444;
+    }
+    color: white;
+  }
+}
+The CSS :
+.page {
+  background-color: #444;
+  color: white;
+}
+
+Example:
+$rounded: true;
+.mark {
+  @extend %centerElement;
+  border-radius: if($rounded, 6px, null);
+}
+The CSS :
+.mark {
+  border-radius: 6px;
+}
+
+// Syntax 1:
+$a1: 1;
+@if $a1 == 100 {
+  Statement
+} @else {
+  Statement
+}
+
+// Syntax 2:
+$a1: 1;
+border-radius: if($a1==100, 1px solid black, null) ===> if(Condtion, value, null)
+
+// Full Example :
+$direction: "top";
+.parent-direction {
+  @extend %centerElement;
+  width: 300px;
+  height: 300px;
+  position: relative;
+  margin: 50px auto;
+  &::before {
+    content: "";
+    position: absolute;
+    border: 20px solid transparent;
+    @if $direction == "top" {
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: red;
+    } @else if direction == "right" {
+      right: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: red;
+    } @else if direction == "bottom" {
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-color: red;
+    } @else if direction == "left" {
+      left: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: red;
+    } @else {
+      @error "This Direction #{$direction} is not valid";
+    }
+  }
+}
+
+The CSS :
+.parent-direction {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  margin: 50px auto;
+}
+
+.parent-direction::before {
+  content: "";
+  position: absolute;
+  border: 20px solid transparent;
+  top: -40px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-bottom-color: red;
+}
+
+Lesson 5 ===> Interbolation #{Varibable || Value}
+عملية إقحام قيمة ما لمتغير أو أي قيمة في سلسلة نصية معينة
+Example:
+$company: "Nour";
+$position: "left";
+.add-#{$company}-#{$position} {
+  font-size: 10px;
+  background-color: url("./path");
+  #{$position}: 0;
+}
+
+unique_id() function  ===> It is a function returns a random number
+Example:
+.add-#{unique-id()} {
+  // Deferent Id
+  font-weight: bod;
+}
+
+The CSS :
+.add-Nour-left {
+  font-size: 10px;
+  background-color: url("./path");
+  left: 0;
+}
+
+.add-u9db76ed8 {
+  font-weight: bod;
+}
+
+Lesson 6 ===> Type Of Comments
+
+1 - This Comment isn't Show in css File (خاص بملف الساس)
+//
+2 - This Comment is Show in css File  ===> ولكن لن يظهر في الكود المضغوط
+/ ** /
+3 - This Comment Will Show in Any File ===> (مضغوط أو اي ملف)
+/ *! * /
+4 - يستخدم لتوثيق المعلومات
+///
+Note: You can use interbolation in any comment (//, / ** /, / *!* /, ///)
 */
