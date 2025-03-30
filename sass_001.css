@@ -474,4 +474,363 @@ Lesson 6 ===> Type Of Comments
 4 - يستخدم لتوثيق المعلومات
 ///
 Note: You can use interbolation in any comment (//, / ** /, / *!* /, ///)
+
+Lesson 7 ===> Mixin And Include
+تعمل نفس مبدأ عمل ===> placeholder ===> ولكن أكثر أحترافية
+// من الأفضل لك عمل مجلد بأسم مساعدات خاص بعملية الميكسين
+// Example:
+@mixin list-reset {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+ul.links {
+  @include list-reset;
+}
+The CSS :
+ul.links {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+// Example:
+@mixin circle($d) {
+  border-radius: 50%;
+  width: $d;
+  height: $d;
+}
+.circle-100 {
+  @include circle(100px);
+  background-color: red;
+  color: white;
+}
+The CSS :
+.circle-100 {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  color: white;
+}
+// ممكن تعمل ميكسين يستدعي ميكسين آخر بداخل
+@mixin centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.center-circle {
+  @include centering;
+  @include circle(200px);
+}
+The CSS :
+.center-circle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+}
+
+Lesson 8 ===> Loop In SASS << ❤❤❤ >>
+1 ===> For Loop
+Syntax:
+1 - First Style of for loop
+@for $i from 1 through 10 {
+  Statement
+}
+
+2 - Second Style of for loop
+@for $i from 1 to 10 {
+  Statement
+}
+
+// Example:
+@for $i from 1 through 5 {
+  .class-#{$i} {
+    font-size: #{$i + 10px};
+  }
+}
+
+The CSS :
+.class-1 {
+  font-size: 11px;
+}
+
+.class-2 {
+  font-size: 12px;
+}
+
+.class-3 {
+  font-size: 13px;
+}
+
+.class-4 {
+  font-size: 14px;
+}
+
+.class-5 {
+  font-size: 15px;
+}
+
+// Example:
+$d: 0;
+@for $i from 1 through 10 {
+  .class-#{100 + $i} {
+    width: $d + 100px;
+    height: $d + 100px;
+  }
+  $d: $d + 100px;
+}
+
+2 ===> ForEach ===> توفر عليك وقت للكتابة وتقوم بتنسيق الكود بطريقة إحترافية
+// Example:
+$themes: red, green, blue;
+@each $theme in $themes {
+  .#{$theme}-theme {
+    .product {
+      background-color: white;
+      border-bottom: 2px solid $theme;
+      .title {
+        color: $theme;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+The CSS :
+.red-theme .product {
+  background-color: white;
+  border-bottom: 2px solid red;
+}
+
+.red-theme .product .title {
+  color: red;
+  font-weight: bold;
+}
+
+.green-theme .product {
+  background-color: white;
+  border-bottom: 2px solid green;
+}
+
+.green-theme .product .title {
+  color: green;
+  font-weight: bold;
+}
+
+.blue-theme .product {
+  background-color: white;
+  border-bottom: 2px solid blue;
+}
+
+.blue-theme .product .title {
+  color: blue;
+  font-weight: bold;
+}
+
+3 ===> Maps + Each
+// Example: Maps + Each
+$socials: (
+  "Facebook": blue,
+  "Youtube": red,
+  "Github": black,
+);
+@each $name, $color in $socials {
+  .#{$name} {
+    background-color: $color;
+    color: white;
+    &::before {
+      content: $name;
+    }
+  }
+}
+The CSS :
+.Facebook {
+  background-color: blue;
+  color: white;
+}
+
+.Facebook::before {
+  content: "Facebook";
+}
+
+.Youtube {
+  background-color: red;
+  color: white;
+}
+
+.Youtube::before {
+  content: "Youtube";
+}
+
+.Github {
+  background-color: black;
+  color: white;
+}
+
+.Github::before {
+  content: "Github";
+}
+
+// Example: Each
+$classes: "one" 20px red, "two" 15px green, "three" 22px blue;
+@each $class, $font, $color in $classes {
+  .#{$class} {
+    font-size: $font;
+    background-color: $color;
+    color: white;
+    padding: $font / 2;
+  }
+}
+
+The CSS :
+.one {
+  font-size: 20px;
+  background-color: red;
+  color: white;
+  padding: 10px;
+}
+
+.two {
+  font-size: 15px;
+  background-color: green;
+  color: white;
+  padding: 7.5px;
+}
+
+.three {
+  font-size: 22px;
+  background-color: blue;
+  color: white;
+  padding: 11px;
+}
+
+4 ===> While Loop
+// Example:
+$start: 1;
+@while $start <= 10 {
+  .width-#{$start * 100} {
+    width: $start * 100px;
+    height: $start * 100px;
+  }
+  $start: $start + 1;
+}
+
+The CSS :
+.width-100 {
+  width: 100px;
+  height: 100px;
+}
+
+.width-200 {
+  width: 200px;
+  height: 200px;
+}
+
+.width-300 {
+  width: 300px;
+  height: 300px;
+}
+
+.width-400 {
+  width: 400px;
+  height: 400px;
+}
+
+.width-500 {
+  width: 500px;
+  height: 500px;
+}
+
+.width-600 {
+  width: 600px;
+  height: 600px;
+}
+
+.width-700 {
+  width: 700px;
+  height: 700px;
+}
+
+.width-800 {
+  width: 800px;
+  height: 800px;
+}
+
+.width-900 {
+  width: 900px;
+  height: 900px;
+}
+
+.width-1000 {
+  width: 1000px;
+  height: 1000px;
+}
+
+Lesson 9 ===> Create Bootstrap Grid System
+$grid_cols: 12;
+@for $i from 1 through $grid_cols {
+  .col-#{$i} {
+    width: percentage($i/$grid_cols);
+  }
+}
+
+The CSS :
+.col-1 {
+  width: 8.33333%;
+}
+
+.col-2 {
+  width: 16.66667%;
+}
+
+.col-3 {
+  width: 25%;
+}
+
+.col-4 {
+  width: 33.33333%;
+}
+
+.col-5 {
+  width: 41.66667%;
+}
+
+.col-6 {
+  width: 50%;
+}
+
+.col-7 {
+  width: 58.33333%;
+}
+
+.col-8 {
+  width: 66.66667%;
+}
+
+.col-9 {
+  width: 75%;
+}
+
+.col-10 {
+  width: 83.33333%;
+}
+
+.col-11 {
+  width: 91.66667%;
+}
+
+.col-12 {
+  width: 100%;
+}
 */
