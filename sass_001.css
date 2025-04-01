@@ -833,4 +833,215 @@ The CSS :
 .col-12 {
   width: 100%;
 }
+
+Lesson 10 ===> Function In SASS
+الدوال في الساس نفسها في أي لغة برمجية أخرى
+Syntax :
+@function nameFunction(parametrs) {
+  @return || Statement
+}
+
+// Example:
+@function half($w) {
+  @return $w/2;
+}
+
+$width: 1000px;
+.class1-#{$width} {
+  width: half($width);
+}
+
+The CSS :
+.class1-1000px {
+  width: 500px;
+}
+
+Note: من الأفضل لك وضع ملف خاص بالدوال ووضع له _ قبل الأسم
+
+// Example:
+@function calculate($sizes...) {
+  $total: 0;
+  @each $size in $sizes {
+    $total: $total + $size;
+  }
+  @return $total;
+}
+.class2-#{"A"} {
+  width: calculate(100px, 200px, 3px, 47px);
+}
+The CSS :
+.class2-A {
+  width: 350px;
+}
+
+Lesson 11 ===> Mixin And Content
+It's a function and mixin at the same time :
+
+// Example:
+@mixin overlay($color, $opacity) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color, $opacity);
+}
+
+.lll {
+  &::before {
+    content: "";
+    @include overlay(black, 0.3);
+  }
+}
+
+The CSS :
+.lll::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+// Example:
+@mixin keyFr($anim-name) {
+  @-webkit-keyframes #{$anim-name} {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes #{$anim-name} {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@include keyFr("animation1");
+
+The CSS :
+@-webkit-keyframes animation1 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes animation1 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+Note: في المثال السابق سيبقى عمل الانيميشن ثابت التغير يطأ على أسمه فقط
+Note: The Same Example But By Content
+@mixin keyAnim($anim-name) {
+  @-webkit-keyframes #{$anim-name} {
+    @content;
+  }
+  @keyframes #{$anim-name} {
+    @content;
+  }
+}
+
+@include keyAnim("newAnimation") {
+  from {
+    background-color: red;
+  }
+  to {
+    background-color: orange;
+  }
+}
+
+The CSS :
+@-webkit-keyframes newAnimation {
+  from {
+    background-color: red;
+  }
+  to {
+    background-color: orange;
+  }
+}
+
+@keyframes newAnimation {
+  from {
+    background-color: red;
+  }
+  to {
+    background-color: orange;
+  }
+}
+
+// Full Example : (If, Mixin, Content)
+@mixin breakPoints($point) {
+  @if $point == "mobile" {
+    @media (max-width: 767px) {
+      @content;
+    }
+  } @else if $point == "small" {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $point == "medium" {
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $point == "large" {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+}
+
+.media {
+  @include breakPoints("mobile") {
+    font-size: 15px;
+  }
+  @include breakPoints("small") {
+    font-size: 18px;
+  }
+  @include breakPoints("medium") {
+    font-size: 20px;
+  }
+  @include breakPoints("large") {
+    font-size: 22px;
+  }
+}
+
+The CSS :
+@media (max-width: 767px) {
+  .media {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 768px) {
+  .media {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 992px) {
+  .media {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .media {
+    font-size: 22px;
+  }
+}
 */
